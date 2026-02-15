@@ -2,3 +2,19 @@
   margin: 0;
   padding: 0;
 }
+
+body{
+  width: 100vw;
+  height: 100vh;
+  background-color: antiquewhite;
+}
+
+#root{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 20px;
+  box-sizing: border-box;
+}

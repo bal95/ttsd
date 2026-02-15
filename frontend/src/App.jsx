@@ -1,22 +1,20 @@
 import './App.css'
 import { useRef, useState } from 'react'
+import ImageGetter from './components/ImageGetter'
+import AIOutput from './components/AIOutput'
 
 function App() {
   const SERVER_URL=import.meta.env.VITE_SERVER_URL
-  const [preview,setPreview]=useState(null)
-  let inputRef=useRef(null)
+  const [option,setOption]=useState("translate")
+  const [lang,setLang]=useState("english")
+  let imageRef=useRef(null)
 
-  function handleImageInput(e){
-    const file=e.target.files[0]
-    if(!file) return
-    setPreview(URL.createObjectURL(file))
-  }
-
-  async function sendImage(){
-    const file=inputRef.current?.files[0]
-    if(!file) alert("Please select an image first!")
+  async function handleSubmit(){
+    const file=imageRef.current?.files[0]
     const formData=new FormData()
     formData.append('image',file)
+    formData.append('option',option)
+    formData.append('lang',lang)
     try{
       const res=await fetch(`${SERVER_URL}/api/upload-image`,{
         method:"POST",
@@ -31,13 +29,12 @@ function App() {
   }
 
   return (
-    <>
-      <label htmlFor="imageFile">Upload PNG, JPG or JPEG image: </label>
-      <input type="file" accept="image/*" name="imageFile" id="imageFile" 
-        ref={inputRef} onChange={handleImageInput}/>
-      {preview && <img src={preview} alt="Preview Image" className="preview"/>}
-      <button onClick={sendImage}>Submit</button>
-    </>
+    <div className='app'>
+      <ImageGetter imageRef={imageRef} 
+      setOption={setOption} setLang={setLang} 
+      handleSubmit={handleSubmit} />
+      <AIOutput />
+    </div>
   )
 }
 
