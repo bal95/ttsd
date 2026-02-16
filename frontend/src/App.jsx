@@ -7,9 +7,13 @@ function App() {
   const SERVER_URL=import.meta.env.VITE_SERVER_URL
   const [option,setOption]=useState("translate")
   const [lang,setLang]=useState("english")
+  const [output,setOutput]=useState("")
+  const [serverStatus,setServerStatus]=useState(false)
+
   let imageRef=useRef(null)
 
   async function handleSubmit(){
+    setServerStatus(true)
     const file=imageRef.current?.files[0]
     const formData=new FormData()
     formData.append('image',file)
@@ -20,11 +24,14 @@ function App() {
         method:"POST",
         body:formData
       })
-      if(res.ok) alert("Upload success")
-      else alert("Upload error")
+      if(res.ok){
+        const result=await res.json()
+        setOutput(result.message)
+        setServerStatus(false)
+      }
     }
     catch(error){
-      alert(error)
+      setOutput(error.message)
     }
   }
 
@@ -33,7 +40,7 @@ function App() {
       <ImageGetter imageRef={imageRef} 
       setOption={setOption} setLang={setLang} 
       handleSubmit={handleSubmit} />
-      <AIOutput />
+      <AIOutput output={serverStatus?"Waiting for AI to respond...":output}/>
     </div>
   )
 }

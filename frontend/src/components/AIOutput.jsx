@@ -1,9 +1,9 @@
 import '../styles/AIOutput.css'
 
-function AIOutput(){
+function AIOutput({output}){
   return(
     <div className='aioutput'>
-      AIOUTPUT
+      {output}
     </div>
   )
 }
