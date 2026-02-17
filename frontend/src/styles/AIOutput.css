@@ -1,5 +1,38 @@
-.aioutput{
-  width: 100%;
-  height: 500px;
+.container{
   background-color: blue;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.aioutput{
+  background-color: orange;
+  width: 100%;
+  height: 90%;
+  /* margin: 5px; */
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 2em;
+  box-sizing: border-box;
+  overflow: hidden auto;
+}
+
+button{
+  width: 45px;
+  height: 10%;
+  cursor: pointer;
+}
+
+@media screen and (max-width:768px){
+  .container{
+    width: 100%;
+    flex-direction: column;
+    height: 50%;
+  }
 }

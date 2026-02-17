@@ -7,8 +7,9 @@ function App() {
   const SERVER_URL=import.meta.env.VITE_SERVER_URL
   const [option,setOption]=useState("translate")
   const [lang,setLang]=useState("english")
-  const [output,setOutput]=useState("")
+  const [output,setOutput]=useState("Waiting for user input...")
   const [serverStatus,setServerStatus]=useState(false)
+  const [audioURL,setAudioUrl]=useState(null)
 
   let imageRef=useRef(null)
 
@@ -25,9 +26,17 @@ function App() {
         body:formData
       })
       if(res.ok){
+        setServerStatus(false)
         const result=await res.json()
         setOutput(result.message)
         setServerStatus(false)
+        let audioChunks=[]
+        const audioResponse=(await fetch(`${SERVER_URL}/api/speech`)).body
+        for await(const chunk of audioResponse){
+          audioChunks.push(chunk)
+        }
+        const audioBlob=new Blob(audioChunks,{type:"audio/mpeg"})
+        setAudioUrl(URL.createObjectURL(audioBlob))
       }
     }
     catch(error){
@@ -39,8 +48,9 @@ function App() {
     <div className='app'>
       <ImageGetter imageRef={imageRef} 
       setOption={setOption} setLang={setLang} 
-      handleSubmit={handleSubmit} />
-      <AIOutput output={serverStatus?"Waiting for AI to respond...":output}/>
+      handleSubmit={handleSubmit}/>
+      <AIOutput output={serverStatus?"Waiting for AI to respond...":output}
+      audioURL={audioURL}/>
     </div>
   )
 }

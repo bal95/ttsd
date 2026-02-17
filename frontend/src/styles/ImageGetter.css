@@ -1,5 +1,5 @@
 .imgget{
-  width: 100%;
+  width: 50%;
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -80,4 +80,12 @@ select{
 
 button[id="submit"]:disabled{
   cursor: none;
+}
+
+@media screen and (max-width:768px){
+  .imgget{
+    width: 100%;
+    flex-direction: column;
+    height: 50%;
+  }
 }

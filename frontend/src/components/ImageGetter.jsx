@@ -21,6 +21,8 @@ function ClearImage({handleClear}){
 function ImageGetter({imageRef,setOption,setLang,handleSubmit}){
   const [status,setStatus]=useState(false)
   const [preview,setPreview]=useState(null)
+  const [showLang,setShowLang]=useState(false)
+  const LANGS=["English","Hindi","Latin","Spanish"]
 
   function handleButtonClick(e){
     const imginp=document.querySelector("input")
@@ -39,14 +41,21 @@ function ImageGetter({imageRef,setOption,setLang,handleSubmit}){
     setStatus(false)
   }
 
+  function handleImageOptions(e){
+    setOption(e.target.value)
+    if(e.target.value==="dictate")
+      setShowLang(true)
+    else
+      setShowLang(false)
+  }
+
   return(
     <div className='imgget'>
       <div className='display'>
         {status?
           <>
             <ClearImage handleClear={handleClear}/>
-            <img src={preview} style={{width:"100%",height:"100%"}}>
-            </img>
+            <img src={preview} style={{width:"100%",height:"100%",objectFit:"contain"}} />
           </>
           : <NoFileSelected handleButtonClick={handleButtonClick}/>}
       </div>
@@ -55,16 +64,14 @@ function ImageGetter({imageRef,setOption,setLang,handleSubmit}){
       style={{display:"none"}} onChange={handleImageInput}/>
       <div className='uploadOptions'>
         <select name="option" id="option" 
-        onChange={(e)=>setOption(e.target.value)}>
+        onChange={handleImageOptions} defaultValue={"translate"} required>
           <option value="translate">Translate</option>
           <option value="summarize">Summarize</option>
           <option value="dictate">Dictate</option>
-      </select>
-          <select name="lang" id="lang" 
-          onChange={(e)=>setLang(e.target.value)}>
-          <option value="english">English</option>
-          <option value="hindi">Hindi</option>
-          <option value="latin">Latin</option>
+        </select>
+        <select name="lang" id="lang" disabled={showLang}
+          onChange={(e)=>setLang(e.target.value)} defaultValue={"english"}>
+          {LANGS.map((lang,idx)=><option key={idx+1} value={lang}>{lang}</option>)}
         </select>
       </div>
       <button id="submit" onClick={handleSubmit} disabled={!status}>
